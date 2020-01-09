@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup as bs
 import random
+import wget
 
 
 
@@ -41,12 +42,18 @@ def download_music():
         song_name = input('What songs would you like to download?:::::::')
         artiste = input('By which artiste?::::::')
         url = 'https://www.genyt.net/search.php?q={}+{}'.format(song_name, artiste)
-        content = session.get(url, headers=headers).content
+        content = session.get(url, headers=headers)
         #DECODE THE CONTENT WHILE CALLING BEAUTIFULSOUP NOT AFTERWARDS TO PREVENT IT FROM TURNING SOUP TO STRING
         #DECODED BEACUSE THE SITE CONTAINS UNSUPPORTED UNICODE CHARACTERS 
-        soup = bs(content.decode('utf-8'), 'html.parser')
-        div = soup.find_all('div',{'class':'gytbox'})[0]
-        print(div)
-
+        soup = bs(content, 'html.parser')
+        span = soup.find_all('span',{'class':'gytImg'})[0]
+        href = span.find('a')['href']
+        open_href = session.get(href, headers=headers)#.decode('utf-8')
+        soup_2 = bs(open_href, 'html.parser')
+        print('hi')
 download_music()
-    
+
+
+
+def something():
+    pass
